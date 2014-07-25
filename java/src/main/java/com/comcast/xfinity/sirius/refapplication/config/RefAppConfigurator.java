@@ -50,7 +50,7 @@ public class RefAppConfigurator {
 
         akkaPath = new StringBuilder("")
             .append("akka.tcp://")
-            .append("sirius-system").append("@")
+            .append("sirius-2552").append("@")
             .append(siriusHostName).append(":")
             .append(siriusPort)
             .append("/user/sirius").toString();
@@ -82,10 +82,28 @@ public class RefAppConfigurator {
 
         SiriusConfiguration siriusConfig = new SiriusConfiguration();
         for (String name: properties.stringPropertyNames()) {
-            siriusConfig.setProp(name, properties.getProperty(name));
+            String value = properties.getProperty(name);
+            setProp(siriusConfig, name, value);
         }
 
         return siriusConfig;
+    }
+
+    private void setProp(SiriusConfiguration siriusConfig, String name, String value) {
+        try {
+            siriusConfig.setProp(name, Integer.valueOf(value));
+            System.out.println(name + " : " + value + " ==> Integer");
+            return;
+        } catch (NumberFormatException ex) { }
+
+        try {
+            siriusConfig.setProp(name, Double.valueOf(value));
+            System.out.println(name + " : " + value + " ==> Double");
+            return;
+        } catch (NumberFormatException ex) { }
+
+        System.out.println(name + " : " + value + " ==> String");
+        siriusConfig.setProp(name, value);
     }
 
 }
