@@ -32,6 +32,8 @@ for JAR in $(find $DEPS); do
     CP="$CP:$JAR"
 done
 
-nohup java -cp "$CP" $MAIN $CONFIG $@ > $WD/output.log 2>&1 &
+JVM_OPTS="-Xmx1024m -Xms1024m"
+
+nohup java $JVM_OPTS -cp "$CP" $MAIN $CONFIG $@ > $WD/output.log 2>&1 &
 echo $! > $WD/run.pid
 sleep .5
