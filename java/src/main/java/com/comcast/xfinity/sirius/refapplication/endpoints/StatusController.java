@@ -35,10 +35,19 @@ public class StatusController {
      */
     @GET
     @Path("sirius-status")
-    public Response getStatus() throws Exception {
+    public Response getSiriusStatus() throws Exception {
         NodeStats.FullNodeStatus siriusStatus = RefAppState.sirius.getStatus().get(5, TimeUnit.SECONDS);
 
         return Response.ok(siriusStatus.toString(), MediaType.TEXT_PLAIN_TYPE).build();
+    }
+
+    @GET
+    @Path("status")
+    public Response getStatus() throws Exception {
+        String output = "successfulPuts: " + RefAppState.successfulPuts + "\n";
+        output += "failedPuts: " + (RefAppState.totalPuts.get() - RefAppState.successfulPuts.get()) + "\n";
+
+        return Response.ok(output, MediaType.TEXT_PLAIN_TYPE).build();
     }
 
     /**
